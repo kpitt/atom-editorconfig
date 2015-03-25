@@ -2,20 +2,19 @@ editorconfig = require('editorconfig')
 
 init = (editor) ->
   file = editor.getURI()
-  if !file
-    return
+  return unless file
+
   editorconfig.parse(file).then (config) ->
-    if Object.keys(config).length == 0
-      return
+    return if Object.keys(config).length == 0
+
     isTab = config.indent_style == 'tab' or !editor.softTabs
     if isTab
       editor.setSoftTabs false
-      if config.tab_width
-        editor.setTabLength config.tab_width
+      editor.setTabLength config.tab_width if config.tab_width
     else
       editor.setSoftTabs true
-      if config.indent_size
-        editor.setTabLength config.indent_size
+      editor.setTabLength config.indent_size if config.indent_size
+
     if config.charset
       # EditorConfig charset names matches iconv charset names.
       # Which is used by Atom. So no charset name convertion is needed.
