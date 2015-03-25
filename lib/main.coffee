@@ -1,6 +1,6 @@
+editorconfig = require('editorconfig')
+
 init = (editor) ->
-  if !editor
-    return
   file = editor.getURI()
   if !file
     return
@@ -23,11 +23,9 @@ init = (editor) ->
     return
   return
 
-Subscriber = require('emissary').Subscriber
-editorconfig = require('editorconfig')
-plugin = module.exports
-Subscriber.extend plugin
+module.exports =
+  activate: ->
+    @initSubscription = atom.workspace.observeTextEditors init
 
-plugin.activate = ->
-  atom.workspace.observeTextEditors init
-  return
+  deactivate: ->
+    @initSubscription.dispose()
